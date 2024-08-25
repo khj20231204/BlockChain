@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan-BlockChain</title>
+
+    <!-- 브라우저에서 탭 상단 아이콘-->
+    <link rel="icon" href="./logo.png" /> 
+    <!-- 브라우저 기본 설정 초기화 cdn | 구글에서 reset cdn 검색-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css" />
+    
+    <!-- 폰트 설정: main.css에서 사용하기 때문에 호출전에 작성 
+        | main.css 에서 body에  font-family: 'Nanum Gothic', sans-serif; 사용 
+        | 구글에서 google fonts 검색-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap" rel="stylesheet">
+
+    <!-- 아이콘 사용 | metarial icon 검색 -->
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /> -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+
+    <link rel="stylesheet" href="/css/inquiry_css.css" />
+
+    <!-- swiper CDN파일. 자바스크립트 사용하기 전에 swiper 사용하기 위해서 main.js위에-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+
+    <!-- jquery & bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" /> -->
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    ​
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
+
+    <script defer src="/js/user_js.js"></script>
+
+    <style>
+       .table-condensed .tr > td:nth-child(1){
+            width: 100px;
+       }
+   </style>
+
+    <script>
+       $(function(){
+        
+            $.get('/list', (data)=>{
+                // console.log(data.id)
+
+                if(data.result == 'SUCCESS'){
+                    $('#inputGroupSelect02').empty();
+                    var ids = data.id.split(",");
+                    for(var i = 0; i<ids.length; i++){
+                        $('#inputGroupSelect02').append('<option value="'+ids[i]+'">'+ids[i]+'</option>');
+                    }
+                }else {
+                    $('#inputGroupSelect02').append('<option>error on getting a list of certificate</option>');
+                }
+            });
+
+            $('#btn-read').click(function(){
+                //var cert = $('#cert').val();
+                var cert = $("#inputGroupSelect02").val();
+                var number = $('#number').val();
+                console.log(`number:${number}`)
+                
+                $.post('/readasset',{cert,number}, (data, status) => {
+                    
+                    if(data.result === 'SUCCESS'){
+
+                        // 테이블에 append 이후 클릭했을 때 변경할 수 있게 텍스트로
+                        $('#td_assetname').empty()
+                        $('#td_assetname').append(`<input type="text" value="${data.value.assetName}" id="assetname">`)
+
+                        $('#td_params').empty()
+                        $('#td_params').append(`<input type="text" value="${data.value.params}" id="params">`)
+
+                        $('#td_bank').empty()
+                        $('#td_bank').append(`<input type="text" value="${data.value.bank}" id="bank">`)
+
+                        $('#td_money').empty()
+                        $('#td_money').append(`<input type="text" value="${data.value.money}" id="money">`)
+                        
+                        // $('#td_modify_del').append(`<button type="button" class="btn btn-success btn-block"  id="btn-modify">수정하기</button>`)
+                        $('#td_modify_del').empty();
+                        $('#td_modify_del').append(`<br>
+                                                <button type="button" class="btn btn-default btn-block" id="btn_modify">수정하기</button>
+                                                <br>
+                                                <button type="button" class="btn btn-danger btn-block" id="btn_del">삭제하기</button>
+                                                <br>`)
+                        
+                        $('#result_contents').empty();
+                        $('#result_contents').append(`${data.msg}`);
+                    }else {
+                        $('#td_assetname').empty()
+                        $('#td_params').empty()
+                        $('#td_bank').empty()
+                        $('#td_money').empty()
+                        $('#td_modify_del').empty()
+
+                        $('#result_contents').empty();
+                        $('#result_contents').append(`${data.msg}`);
+                        // $('#result_contents').empty();
+                    }//if
+                })//post
+            })//btn-read.click
+
+        
+            $("#td_modify_del").on("click","#btn_modify",function(){
+                //var cert = $('#cert').val();
+                var cert = $("#inputGroupSelect02").val();
+                var number = $('#number').val();
+                var assetname = $('#td_assetname').find('#assetname').val()
+                var params = $('#td_params').find('#params').val()
+                var bank = $('#td_bank').find('#bank').val()
+                var money = $('#td_money').find('#money').val()
+
+                console.log(`asset-post: cert-${cert} number-${number} assetname-${assetname} params-${params} bank-${bank} money-${money}`)
+
+                tag = {
+                    "cert" : cert,
+                    "number" : number,
+                    "assetname" : assetname,
+                    "params" : params,
+                    "bank" : bank,
+                    "money" : money
+                }
+
+                $.post('/updateasset', tag, (data, status) => {
+                    console.log(`data:${data}`)
+
+                    if(data.result === "SUCCESS"){
+                        alert("Revision Completed")
+
+                        $('#td_assetname').find('#assetname').val('')
+                        $('#td_params').find('#params').val('')
+                        $('#td_bank').find('#bank').val('')
+                        $('#td_money').find('#money').val('')
+                    }
+                    $("#result_contents").text(`${data.msg}`)
+                })  
+            })
+
+            $('#td_modify_del').on('click','#btn_del',function(){
+                //var cert = $('#cert').val();
+                var cert = $("#inputGroupSelect02").val();
+                var number = $('#number').val();
+
+                $.post('/deleteasset', {cert, number}, (data, status) => {
+                    console.log(`data:${data}`)
+                    alert("Deletion Completed")
+
+                    if(data.result === "SUCCESS"){
+                        $('#td_assetname').empty()
+                        $('#td_params').empty()
+                        $('#td_bank').empty()
+                        $('#td_money').empty()
+                        $('#td_modify_del').empty()
+                    }
+
+                    $("#result_contents").text(`${data.msg}`)
+                })
+            })
+
+       })//function
+    </script>
+
+</head>
+<body>
+    <header>
+        <div class="inner">
+            <a href="/" class="logo"> 
+                <img src="/logo.png" alt="logo" width="50px" height="50px" />
+            </a>
+            <div class="sub-menu">
+                <ul class="menu">
+                    <li>
+                        <a href="/view/userSubmitCert.html">Submit Certificate</a>
+                    </li>
+                    <li>
+                        <a href="/view/inquiry.html">Inquiry</a>
+                    </li>
+                    <li>
+                        <a href="/view/detailAsset.html">Detail Asset</a>
+                    </li>
+                </ul>
+                <div class="search">
+                    <input type="text" />
+                    <div class="material-symbols-outlined">search</div>
+                </div>
+            </div>
+        </div><!-- inner end -->
+    </header>
+    <!-- HEADER END -->
+    <!-- BODY -->
+    <section class="main-background">
+        <div class="contents_inner">
+            <div class="text-group">
+                <img src="/images/favorite_text.png" alt="">
+                <a href="/view/admin.html" class="btn_temp">Connect Admin</a>
+            </div>
+            <div class="contents">
+                <div class="print_contents">
+                    <!-- 시작 -->
+                    
+                    <div>
+                        <!-- <label for="cert" class="form-label">Certificate Number</label>
+                        <input type="text" class="form-control cert" id="cert"> -->
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="inputGroupSelect02">Certificate : </label>
+                            <select  class="form-select" id="inputGroupSelect02">
+                                <option selected>Choose... Certificate</option>
+                            </select>
+                        </div>
+                        <br><br>
+                        <label for="number" class="form-label">Asset Number</label>
+                        <input type="text" class="form-control number" id="number">
+                        <br><br>
+                        <button class="btn_temp" id="btn-read">자산 조회</button>
+                    </div><!-- body end -->
+
+                    <br><br>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="table-danger">
+                                        <td>AssetName</td>
+                                        <td id="td_assetname"></td>
+                                    </tr>
+                                    <tr class="table-active">
+                                        <td>Params</td>
+                                        <td id="td_params"></td>
+                                    </tr>
+                                    <tr class="table-success">
+                                        <td>Bank</td>
+                                        <td id="td_bank"></td>
+                                    </tr>
+                                    <tr class="table-warning">
+                                        <td>Money</td>
+                                        <td id="td_money"></td>
+                                    </tr>
+                                    <tr> 
+                                        <td colspan="2" id="td_modify_del">
+                                            <!-- <button type="button" class="btn btn-default btn-block" id="btn_modify">수정하기</button> -->
+                                            <!-- <button type="button" class="btn btn-danger btn-block" id="btn_del">삭제하기</button> -->
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="td_result">
+                                            <div id="title">[ Result ]</div>
+                                            <br>
+                                            <div id="result_contents"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 끝 -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- BODY END -->
+
+    <!-- AWARDS  -->
+    <section class="awards">
+        <div class="inner">
+            <div class="swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="/images/awards_slide1.jpg" alt="" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/images/awards_slide2.jpg" alt="" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/images/awards_slide3.jpg" alt="" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/images/awards_slide4.jpg" alt="" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/images/awards_slide5.jpg" alt="" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/images/awards_slide6.jpg" alt="" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/images/awards_slide7.jpg" alt="" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/images/awards_slide8.jpg" alt="" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- footer -->
+    <footer>
+        <div class="inner">
+            <ul class="menu">
+                <li><a href="javascript:void(0)">개인정보처리방침</a></li>
+                <li><a href="javascript:void(0)">영상정보처리기기 운영</a></li>
+                <li><a href="javascript:void(0)">홈페이지 이용약관</a></li>
+            </ul>
+
+            <div class="info">
+                <p><span>사업자등록번호 305-82-21570</span></p>
+                <p><span>(우) 34917 대전광역시 중구 보문로 246 대림빌딩 2~3층, 11층 소상공인시장진흥공단</span></p>
+                <p><span>대표전화 : 국번없이 1357</span></p>
+            </div>
+            <p class="copyright">
+                &copy; <span class="this-year">Copyright 2021 SEMAS, All Right Reserved.</span>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

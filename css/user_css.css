@@ -1,0 +1,462 @@
+/* COMMON */
+body{
+    color:#777;
+    font-size: 14px;
+    font-weight: 400px;
+    line-height: 1.4; /* 글 사이 행간 높이 */
+    /* font-family: 'Zen Dots', cursive; */
+    font-family: Helvetica, Arial, sans-serif;
+    /* height: 6000px;  */
+}
+
+img{
+    /* 이미지가 div안에 들어가면 밑에 약간의 공간(baseline)이 생긴다 
+        img가 inline 요소기 때문이다. 이걸 없애기 위해 block으로 설정 */
+    display: block; 
+}
+
+a{
+    text-decoration: none; /* 해당페이지의 모든 a태그의 밑줄을 없앤다*/
+}
+
+.label {
+    width: 100px;
+}
+
+.inputText {
+    width: 500px;
+    height: 32px;
+    font-size: 15px;
+    border: 0;
+    border-radius: 15px;
+    outline: none;
+    padding-left: 10px;
+    background-color: rgb(172, 196, 212);
+  }
+
+/*INNER*/
+.inner {
+    width: 1100px;
+    margin: 0 auto;
+    position: relative;
+}
+
+/*BUTTON*/
+.btn {
+    width: 130px;
+    padding: 10px;
+    border: 2px solid #333;
+    border-radius: 4px;
+    color: #333;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    display: block;
+    transition: .4s;
+}
+
+.btn:hover {
+    background-color: #333;
+    color: #FFF;
+}
+
+/* HEADER */
+header{
+    /* background-color: #778899; */
+    background-image: url('../images/top.jpg');
+
+}
+
+header .inner{
+    /* width, margin 이 가운데 정렬해준다 */
+    width : 1200px;
+
+    margin: 0 auto; /*0 위,아래 auto 좌,우 */
+    
+    height:120px;
+    /* background-color: orange; */
+    /* background-image: url('../images/background2.jpg'); */
+
+    /* 
+    header .inner .logo 로고 위아래 가운데 정렬에 사용
+    header .sub-menu 왼쪽에 있는 걸 오른쪽으로 정렬에 사용
+     */
+    position:relative;
+}
+
+header .inner .logo{
+    height: 50px;
+    width: 50px; 
+    /* border: 3px solid black; */
+
+    /* 위, 아래 중 가운데 정렬 */
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin:auto 0;    
+}
+
+header .sub-menu{
+    /* header .sub-menu .search .material-symbols-outlined에서 right:5px
+    하니깐 돋보기가 라인 right 끝까지간다 근데 flex 하나 하니깐 위로
+    정렬된다. 이 부분 07.헤더와 드롭다운 메뉴 06:26 다시 보기 */
+    display: flex;
+
+    /* 
+    처음 왼쪽에 있던 sub-menu 전체를 오른쪽 끝으로 옮긴다 
+    부모는 header .inner
+    */
+    position: absolute;
+    top:10px;
+    right:0
+}
+
+header .sub-menu ul.menu{
+    /* .menu를 flex 하는 게 아니라 .menu의 자식들을 flex 하겠다 */
+    display:flex;
+}
+
+header .sub-menu ul.menu li{
+    /* li::before의 부모로 설정하기 위해서  */ 
+    position: relative;
+}
+
+/* 오른쪽에 작은 작대기 위해서 만든다 */
+header .sub-menu ul.menu li::before{
+    /* border: solid 3px blueviolet; */
+    /* content가 없으면 before란 가상 요소가 만들어지지 않는다*/
+    content: '';
+
+    width: 1px;
+    height: 12px;
+    background-color: black;
+
+    /* li는 inline이란서 width와 height를 사용하기 위해서 블록으로 */
+    display: block;
+   
+    /* 
+    absolute와 fixed를 하게 되면 inline-block로 바뀌기 때문에 위에 display:block 없애도 된다. 
+    위에 까지만 하면 | 만들어 지는데 이걸 absoulte로 하고 세로 가운데 정렬을 하면 글자사이로 배치된다
+    */
+    position:absolute;
+    top:0;
+    bottom:0;
+    margin: auto;
+}
+
+/* 글자사이 | 제일 앞쪽부분 삭제하기 위해서 만듦 */
+header .sub-menu ul.menu li:first-child:before{
+    display: none;
+}
+
+header .sub-menu ul.menu li a{
+    /* background-color: white; */
+    font-size: 12px;
+
+    /*  클릭시 범위를 넓히기 위해서 사용. inline요소라 padding을 주기위해 block으로 */
+    padding:11px 16px;
+    display: block;    
+
+    color:#656565;
+}
+
+header .sub-menu ul.menu li a:hover{
+    color: #6e9fed;
+}
+
+header .sub-menu .search{
+    /* background-color: red; */
+
+    /* .menu를 기준으로 위아래 높이 가운데 정렬하기 위해서 */
+    top:0;
+    bottom:0;
+    margin: auto 0;
+
+    position:relative;
+}
+
+header .sub-menu .search input{
+    /* 박스의 기본 속성 padding boder box-sizing border-radius 암기*/
+    height:34px;
+    width: 36px;
+    padding: 4px 10px;
+    border:1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 5px;
+
+    /* 테두리에 파란선 생기는데 없애기 위해서*/
+    outline: none;
+
+    /* background-color: #fff;텍스트 배경생 */
+    color:#777; /* 텍스트 글자색 */
+
+    font-size:12px;
+
+    /* input:focuts 클릭시 가로로 늘어날 때 전환효과*/ 
+    transition: width .4s;
+}
+
+header .sub-menu .search input:focus{
+    width:160px;
+    /* border-color:violet; */
+}
+
+header .sub-menu .search .material-symbols-outlined{
+    /* 위,아래 가운데 정렬*/
+    position:absolute;
+    top:0;
+    bottom:0;
+    margin: auto 0;
+    
+    /* 위,아래 가운데 정렬일 때 꼭 필요
+    구글 폰트가 24px다 암기! */
+    height: 24px;
+
+    /* 텍스트 안에 돋보기를 놓기 위해서 */
+    right:5px;
+    /* left:5px; */
+
+    /* header .sub-menu .search.focused .material-symbols-outlined 
+    에서 돋보기 서서히 사라지게 하기 위해서 */
+    transition: .4s
+}
+
+/* 자바스크립트에서 class에 focused가 추가 되면 돋보기 삭제 */
+header .sub-menu .search.focused .material-symbols-outlined{
+    opacity: 0;
+}
+
+/* ------------------- 여기까지 상단 작은 메뉴 끝. 밑에부터 메인 메뉴 시작----------------------------- */
+
+header .main-menu{
+    /* background-color: red; */
+    display:flex;
+
+    /* inner의 상단에 붙어 있는 main-menu를 하단쪽으로 옮긴다 */
+    position:absolute;
+    bottom:0;
+    right:0;
+    z-index:1; /* 마우스를 올렸을 때 메인메뉴가 제일 상단에 오도록 설정*/
+}
+
+header .main-menu .item{}
+
+header .main-menu .item .item__name{
+    /* 위 오르쪽 아래 왼쪽 */
+    padding:10px 20px 34px 20px;
+    font-size:14px;
+}
+
+/* .item__name:hover이 아니라 item__contents 내용에 영향이 가기 때문에
+.item:hover 이라고 하는데 무슨 말인지 모르겠다
+.item:hover 됐을 때 .item__name 에 뭘 하겠단 내용*/
+header .main-menu .item:hover .item__name{
+    background-color: #2c2a29;
+    color:#669900;
+    
+    /* div 상단 양쪽 모서리를 둥글게 깎는다 */
+    border-radius: 6px 6px 0 0;
+}
+
+header .main-menu .item .item__contents{
+    /* 메인메뉴 밑에 마우스 올릴 때 나오는 메뉴 부분.
+    position:fiexed를 하게되면 기분이 뷰포트(브라우저)가 된다
+    브라우저가 기준인데 width가 100%이다. 전체 부라우저를 차지하기 위해서
+    한칸 밑으로 와서 가로 넓이를 100%가 되게한다*/
+    position:fixed;
+    width:100%;
+    left: 0;
+    
+    /* background-color: violet; */
+
+    /* hover됐을 때만 나타내기 위해서*/
+    display: none;    
+}
+
+/* item__contents도 item에 hover를 둔다*/
+header .main-menu .item:hover .item__contents{
+    /* hover가 됐을 때 display의 none가 block으로 나타난다 */
+    display: block;
+}
+
+header .main-menu .item .item__contents .contents__menu{
+    background-color: #2c2a29;
+    height:100px;
+}
+
+header .main-menu .item .item__contents .contents__menu > ul{
+    
+   
+}
+
+header .main-menu .item .item__contents .contents__menu > ul > li{
+      
+    /* background-color: violet; */
+
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    width: 600px;
+    /* height: 180px; */
+    margin: 0 auto;
+
+    display: flex;
+}
+
+header .main-menu .item .item__contents .contents__menu > ul >li h4{
+    padding: 30px;
+    font-size: 14px;
+    color:#fff;
+    cursor: pointer;
+}
+
+header .main-menu .item .item__contents .contents__menu > ul >li h4:hover{
+    color:#6e9fed
+}
+
+header .main-menu .item .item__contents .contents__texture{
+    /* background-color: green; */
+    background-image: url('../images/pattern.jpg');
+    height: 50px;
+
+    /* 글자와 관련된 속성은 상속되기 때문에 밑에 h4, p까지 전부 12px가 된다 */
+    font-size: 12px;
+
+    padding: 26px 0;
+}
+
+header .main-menu .item .item__contents .contents__texture > ul > li{
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    width: 600px;
+    /* height: 180px; */
+    margin: 0 auto;
+}
+
+header .main-menu .item .item__contents .contents__texture > ul >li h4{
+    color:#999;
+    font-weight: 700px;
+}
+
+header .main-menu .item .item__contents .contents__texture > ul >li p{
+    color: #669900;
+    padding-top: 20px;
+}
+
+/* SECTION background */
+.main-background{
+    background-image: url("../images/background4.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-size:cover;
+
+    height: 900px;
+
+    position: relative;
+
+    /* background-color: red; */
+}
+
+/* text-group를 가운데 정렬하기 위해서 inner를 움직여야된다 */
+.main-background .contents_inner{
+    width: 1300px;
+    height: 500px; 
+    margin: 0 auto;
+    position: relative;
+    
+    top:200px;
+    /* background-color: yellow; */
+    padding: 50px;
+
+    display: flex;
+}
+
+.main-background .contents_inner .text-group{
+    
+}
+
+.main-background .contents_inner .text-group a{
+    margin: 50px;
+}
+
+.main-background .contents_inner .contents{
+    position: relative;
+
+    left:200px;
+}
+
+.main-background .contents_inner .contents .print_contents{
+    width: 800px;
+    height: 800px;
+    /* background-color: #2c2a29; */
+}
+
+/* AWARDS */
+.awards {
+    background-color: #272727;
+}
+
+.awards .inner {
+    padding: 20px 0;
+}
+
+.awards .inner .swiper {
+    /* width: 100%; */
+}
+
+/* footer */
+footer{
+    /* 색깔 디자인 암기하기 */
+    background-color: #272727;
+    border-top: 1px slid #333;
+}
+
+footer .inner{
+    padding: 20px 0 50px 0
+}
+
+footer .inner .menu{
+    display: flex;
+    justify-content: center;
+}
+
+footer .inner .menu li{}
+
+footer .inner .menu li::before{
+    content: '';
+
+}
+
+footer .inner .menu li a{
+    color:#ccc;
+    font-size:12px;
+    font-weight: 700;
+    display: block;
+    padding:15px
+}
+
+footer .inner .info{
+    margin-top:30px;
+    text-align:center;
+}
+
+footer .inner .info span{
+    margin-right: 2px;
+    color:#999;
+    font-size:12px;
+}
+
+
+footer .inner .copyright{
+    color:#999;
+    font-size: 12px;
+    text-align: center;
+    margin-top:12px;
+}
+
+
+

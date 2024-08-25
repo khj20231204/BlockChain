@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan-BlockChain</title>
+
+    <!-- 브라우저에서 탭 상단 아이콘-->
+    <link rel="icon" href="../logo.png" />
+    <!-- 브라우저 기본 설정 초기화 cdn | 구글에서 reset cdn 검색-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css" />
+
+    <!-- 폰트 설정: main.css에서 사용하기 때문에 호출전에 작성 
+        | main.css 에서 body에  font-family: 'Nanum Gothic', sans-serif; 사용 
+        | 구글에서 google fonts 검색-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap" rel="stylesheet">
+
+    <!-- 아이콘 사용 | metarial icon 검색 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <link rel="stylesheet" href="/css/adminAssetLoan_css.css" />
+
+    <!-- swiper CDN파일. 자바스크립트 사용하기 전에 swiper 사용하기 위해서 main.js위에-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+    <script defer src="/js/admin_js.js"></script>
+
+    <script>
+        $(function () {
+
+            $('#createasset').click(function () {
+                var cert = $('#cert').val();
+                var number = $('#number').val();
+                var assetname = $('#assetname').val();
+                var params = $('#params').val();
+                var bank = $('#bank').val();
+                var money = $('#money').val();
+
+                console.log(`cert:${cert} number:${number} assetname:${assetname} params:${params} bank:${bank} money:${money}`)
+
+                $.post("/createasset", {cert, number, assetname, params, bank, money}, (res, status) => {
+
+                    console.log(`res.result:${res.result}, res.msg:${res.msg}`)
+
+                    if(res.result === 'SUCCESS'){
+                        $('#cert').val('');
+                        $('#number').val('');
+                        $('#assetname').val('');
+                        $('#params').val('');
+                        $('#bank').val('');
+                        $('#money').val('');
+                    }
+
+                    $(".resultContents").html('')
+                    $(".resultContents").html(`${res.msg}`)
+                });
+            });//createwallet
+        })
+    </script>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="inner">
+            <a href="/" class="logo">
+                <img src="/images/logo.png" alt="logo" width="50px" height="50px" />
+            </a>
+            <!-- sub-menu -->
+            <div class="sub-menu">
+                <ul class="menu">
+                    <li>
+                        <a href="/">user site</a>
+                    </li>
+                    <li>
+                        <a href="/view/inquiry.html">Inquiry</a>
+                    </li>
+                    <li>
+                        <a href="/view/detailAsset.html">Detail Asset</a>
+                    </li>
+                </ul>
+                <div class="search">
+                    <input type="text" />
+                    <div class="material-symbols-outlined"></div>
+                </div>
+            </div><!-- sub-menu end -->
+
+            <!-- main-menu -->
+            <ul class="main-menu">
+                <li class="item">
+                    <div class="item__name">Check Certification</div>
+                    <div class="item__contents">
+                        <div class="contents__menu">
+                            <ul class="inner">
+                                <li>
+                                    <a href="">
+                                        <h4>Resident Registration</h4>
+                                    </a>
+                                    <a href="">
+                                        <h4>A driver's license</h4>
+                                    </a>
+                                    <a href="">
+                                        <h4>Business License</h4>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="contents__texture">
+                            <ul class="inner">
+                                <li>
+                                    <h4>인증서 체크</h4>
+                                    <p>신청자가 지갑생성을 위해 제출한 인증서 확인</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="item">
+                    <div class="item__name">Create Wallet</div>
+                    <div class="item__contents">
+                        <div class="contents__menu">
+                            <ul class="inner">
+                                <li>
+                                    <a href="/view/adminCreateWallet.html">
+                                        <h4>User Wallet</h4>
+                                    <a href="/view/adminCreateWallet.html">
+                                        <h4>Admin Wallet</h4>
+                                    </a>
+											</li>
+                            </ul>
+                        </div>
+                        <div class="contents__texture">
+                            <ul class="inner">
+                                <li>
+                                    <h4>지갑생성</h4>
+                                    <p>관리자와 신청자의 지갑을 생성</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="item">
+                    <div class="item__name">Evaluation</div>
+                    <div class="item__contents">
+                        <div class="contents__menu">
+                            <ul class="inner">
+                                <li>
+                                    <h4>Evaluation</h4>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="contents__texture">
+                            <ul class="inner">
+                                <li>
+                                    <h4>심사</h4>
+                                    <p>신청자들의 심사 결과를 전송</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="item">
+                    <div class="item__name">Create Asset</div>
+                    <div class="item__contents">
+                        <div class="contents__menu">
+                            <ul class="inner">
+                                <li>
+                                    <h4>real name verification</h4>
+                                    <h4>tax clearance certificate</h4>
+                                    <h4>certificate of seal impression</h4>
+												<a href="/view/adminAssetLoan.html"><h4>loan</h4></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="contents__texture">
+                            <ul class="inner">
+                                <li>
+                                    <h4>자산 생성</h4>
+                                    <p>실명확인증, 납세증명서, 법인인감증명서, 대출금액을 자산으로 생성</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+        </div><!-- inner end -->
+    </header>
+
+    <!-- SECTION background -->
+    <section class="main-background">
+        <div class="contents_inner">
+           
+            <div class="contents">
+                <!-- 내용 추가-->    
+                <div class="inputvalue">
+                    <label for="" class="form-label">Certificate(Number)</label><br>
+                    <input type="text" class="certText" id="cert"><br>
+                    <br><br><br>
+                    <label for="" class="form-label">Asset Number</label><br>
+                    <input type="text" class="inputText" id="number"><br>
+                    <br>
+                    <label for="" class="form-label">Asset Explain</label><br>
+                    <input type="text" class="inputText" id="assetname"><br>
+                    <br>
+                    <label for="" class="form-label">Params</label><br>
+                    <input type="text" class="inputText" id="params"><br>
+                    <br>
+                    <label for="" class="form-label">Bank</label><br>
+                    <input type="text" class="inputText" id="bank"><br>
+                    <br>
+                    <label for="" class="form-label">Money</label><br>
+                    <input type="text" class="inputText" id="money"><br>
+                    <br><br>
+                    <button class="btn" id="createasset">CreateAsset</button>
+                </div>
+                <!-- 내용 추가 끝 -->
+
+                <!-- result 시작 -->
+                <div class="result">
+                    <label for="resultContentslabel" class="resultLabel">[ PRINTING RESULT ]</label>
+                    <br><br>
+                    <div class="resultContents">
+                            
+                    </div>
+                </div>
+                <!-- result 끝-->
+
+            </div><!-- contents -->
+          
+            
+        </div>
+    </section>
+
+
+    <!-- AWARDS  -->
+    <section class="awards">
+        <div class="inner">
+            <div class="swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="/images/awards_slide1.jpg" alt="" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/images/awards_slide2.jpg" alt="" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/images/awards_slide3.jpg" alt="" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/images/awards_slide4.jpg" alt="" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/images/awards_slide5.jpg" alt="" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/images/awards_slide6.jpg" alt="" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/images/awards_slide7.jpg" alt="" />
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/images/awards_slide8.jpg" alt="" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- footer -->
+    <footer>
+        <div class="inner">
+            <ul class="menu">
+                <li><a href="javascript:void(0)">개인정보처리방침</a></li>
+                <li><a href="javascript:void(0)">영상정보처리기기 운영</a></li>
+                <li><a href="javascript:void(0)">홈페이지 이용약관</a></li>
+            </ul>
+
+            <div class="info">
+                <p><span>사업자등록번호 305-82-21570</span></p>
+                <p><span>(우) 34917 대전광역시 중구 보문로 246 대림빌딩 2~3층, 11층 소상공인시장진흥공단</span></p>
+                <p><span>대표전화 : 국번없이 1357</span></p>
+            </div>
+            <p class="copyright">
+                &copy; <span class="this-year">Copyright 2021 SEMAS, All Right Reserved.</span>
+            </p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
